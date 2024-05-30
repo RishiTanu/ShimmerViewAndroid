@@ -51,5 +51,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("androidx.fragment:fragment-ktx:1.7.1")
+    implementation("com.github.abdulrehmank7:iOS-date-time-picker:1.05")
 
 }

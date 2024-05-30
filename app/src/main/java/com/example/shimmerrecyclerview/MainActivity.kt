@@ -1,14 +1,13 @@
 package com.example.shimmerrecyclerview
-
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.arkapp.iosdatettimepicker.ui.DialogDateTimePicker
+import com.arkapp.iosdatettimepicker.utils.OnDateTimeSelectedListener
 import com.facebook.shimmer.ShimmerFrameLayout
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +35,45 @@ class MainActivity : AppCompatActivity() {
             loadData()
         }, 3000)*/
 
+        val startDate: Calendar = Calendar.getInstance()
+        val endDate: Calendar = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_MONTH, 27)
+        }
+
+        val dateTimeSelectedListener = object : OnDateTimeSelectedListener {
+            override fun onDateTimeSelected(selectedDateTime: Calendar) {
+                Toast.makeText(this@MainActivity, "Selected date: ${selectedDateTime.time}", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        val dateTimePickerDialog = DialogDateTimePicker(
+            this, // context
+            startDate, // start date
+            1,
+            dateTimeSelectedListener,
+            "Select date and time" // dialog title
+        )
+
+        // Custom method to enforce date constraints
+    //    dateTimePickerDialog.setDateTimeRange(startDate.timeInMillis, endDate.timeInMillis)
+
+
+        dateTimePickerDialog.show()
+
+       /* dateTimePickerDialog.apply {
+            setTitleTextColor(android.R.color.black)
+            setDividerBgColor(android.R.color.black)
+            setCancelBtnColor(R.color.grey)
+            setCancelBtnTextColor(R.color.blue)
+            setSubmitBtnColor(R.color.blue)
+            setSubmitBtnTextColor(R.color.blue)
+            setCancelBtnText("Dismiss")
+            setSubmitBtnText("OK")
+            setFontSize(14)
+            setCenterDividerHeight(38)
+        }*/
+
+
         // Observe network connectivity changes
         viewModel.getNetworkStatus().observe(this, Observer { isConnected ->
             if (isConnected) {
@@ -46,6 +84,17 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+    // Custom extension function to set date range
+/*    fun DialogDateTimePicker.setDateTimeRange(minDate: Long, maxDate: Long) {
+        val minDateCalendar = Calendar.getInstance().apply { timeInMillis = minDate }
+        val maxDateCalendar = Calendar.getInstance().apply { timeInMillis = maxDate }
+
+        *//*this.datePicker.minDate = minDateCalendar
+        this.datePicker.maxDate = maxDateCalendar
+
+        this.timePicker.minDate = minDateCalendar
+        this.timePicker.maxDate = maxDateCalendar*//*
+    }*/
 
     private fun loadData() {
         dataList = listOf(
