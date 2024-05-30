@@ -4,10 +4,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.shimmer.ShimmerFrameLayout
 
 class MainActivity : AppCompatActivity() {
+
+    private val viewModel: YourViewModel by viewModels()
+
 
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var recyclerViewAdapter: RecyclerViewAdapter
@@ -17,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        shimmerLayout = findViewById(R.id.shimmer_layout)
+        /*shimmerLayout = findViewById(R.id.shimmer_layout)
         val recyclerView = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recycler_view)
 
         // Setup initial shimmer adapter
@@ -28,7 +34,17 @@ class MainActivity : AppCompatActivity() {
         // Simulate loading data with delay
         Handler(Looper.getMainLooper()).postDelayed({
             loadData()
-        }, 3000)
+        }, 3000)*/
+
+        // Observe network connectivity changes
+        viewModel.getNetworkStatus().observe(this, Observer { isConnected ->
+            if (isConnected) {
+                // Make your API call here
+                Toast.makeText(this, "Connected to the internet", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun loadData() {

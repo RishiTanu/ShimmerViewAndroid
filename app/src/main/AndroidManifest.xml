@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,14 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShimmerRecyclerView"
         tools:targetApi="31">
-        <activity
+       <!-- <activity
             android:name=".AutoTextCompleteViewCistomize"
-            android:exported="false" />
+            android:exported="false" />-->
        <!-- <activity
             android:name=".OnlinePDFViewActivity"
             android:exported="false" />-->
         <activity
-            android:name=".OnlinePDFViewActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,3 +1,4 @@
+/*
 package com.example.shimmerrecyclerview
 
 import android.content.Context
@@ -27,3 +28,4 @@ class CustomAutoCompleteAdapter(context: Context, private val results: List<Sear
         return view
     }
 }
+*/

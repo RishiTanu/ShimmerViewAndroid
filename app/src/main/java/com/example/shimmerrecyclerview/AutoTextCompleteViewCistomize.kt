@@ -1,6 +1,6 @@
+/*
 package com.example.shimmerrecyclerview
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -29,9 +29,9 @@ class AutoTextCompleteViewCistomize : AppCompatActivity() {
                 }
             }
         })
-
-
     }
+
+*/
 /*    private fun fetchResults(query: String) {
         val request = Request.Builder()
             .url("https://example.com/api/search?query=$query")
@@ -53,7 +53,8 @@ class AutoTextCompleteViewCistomize : AppCompatActivity() {
                 }
             }
         })
-    }*/
+    }*//*
+
 
     private fun parseResults(json: String): List<SearchResult> {
         val results = mutableListOf<SearchResult>()
@@ -72,3 +73,4 @@ class AutoTextCompleteViewCistomize : AppCompatActivity() {
 }
 
 data class SearchResult(val value1: String, val value2: String, val value3: String)
+*/

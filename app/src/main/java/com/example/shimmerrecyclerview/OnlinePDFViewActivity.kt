@@ -1,3 +1,4 @@
+/*
 package com.example.shimmerrecyclerview
 
 import android.app.Dialog
@@ -45,4 +46,4 @@ class OnlinePDFViewActivity : AppCompatActivity() {
         dialog.show()
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
-}
+}*/
