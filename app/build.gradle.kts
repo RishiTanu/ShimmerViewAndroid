@@ -33,6 +33,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        dataBinding  = true
+    }
 }
 
 dependencies {
@@ -52,5 +56,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("androidx.fragment:fragment-ktx:1.7.1")
     implementation("com.github.abdulrehmank7:iOS-date-time-picker:1.05")
+    implementation("com.github.florent37:singledateandtimepicker:2.2.7")
 
 }

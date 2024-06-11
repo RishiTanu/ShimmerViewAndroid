@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".YourBottomSheetFragment">
+
+    <TextView
+        android:id="@+id/tv_flight_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRA27G"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    <TextView
+        android:id="@+id/tv_airline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transavia"
+        android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+    <ImageView
+        android:id="@+id/iv_airline_logo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/shimmer_background" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_departure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GRO\nGIRONA"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_flight_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Departed 01:29 ago"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+        <TextView
+            android:id="@+id/tv_arrival"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RTM\nROTTERDAM"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_barometric_altitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8,150 ft"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+        <TextView
+            android:id="@+id/tv_ground_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="303 kts"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceSubtitle1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_aircraft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Boeing 737-8K2"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+    <TextView
+        android:id="@+id/tv_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PH-HZN"
+        android:gravity="center"
+        android:textAppearance="?attr/textAppearanceSubtitle1" />
+
+</LinearLayout>

@@ -53,11 +53,6 @@ class MainActivity : AppCompatActivity() {
             dateTimeSelectedListener,
             "Select date and time" // dialog title
         )
-
-        // Custom method to enforce date constraints
-    //    dateTimePickerDialog.setDateTimeRange(startDate.timeInMillis, endDate.timeInMillis)
-
-
         dateTimePickerDialog.show()
 
        /* dateTimePickerDialog.apply {
