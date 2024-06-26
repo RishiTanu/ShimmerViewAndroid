@@ -1,22 +1,24 @@
 package com.example.shimmerrecyclerview
 
+import android.app.TimePickerDialog
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.arkapp.iosdatettimepicker.ui.DialogDateTimePicker
-import com.arkapp.iosdatettimepicker.utils.OnDateTimeSelectedListener
+import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog
-import com.google.android.material.button.MaterialButton
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -25,19 +27,52 @@ import java.util.Locale
 
 class MainActivity2 : AppCompatActivity() {
 
+    private lateinit var etPassword: EditText
+    private lateinit var ivTogglePassword: ImageView
+    private var isPasswordVisible: Boolean = false
+
     private lateinit var tvCurrentTime: TextView
     private val updateTimeJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + updateTimeJob)
     private lateinit var showDateTimePicker: Button
     private lateinit var selectedDateTv: TextView
 
+    private lateinit var btnSelectTime: Button
+    private lateinit var tvSelectedTime: TextView
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        tvCurrentTime = findViewById<TextView>(R.id.tv_current_time)
+        etPassword = findViewById(R.id.etPassword)
+        ivTogglePassword = findViewById(R.id.ivTogglePassword)
+
+
+        btnSelectTime = findViewById(R.id.btnSelectTime)
+        tvSelectedTime = findViewById(R.id.tvSelectedTime)
+
+        btnSelectTime.setOnClickListener {
+            showTimePickerDialog()
+        }
+
+        ivTogglePassword.setOnClickListener {
+            if (isPasswordVisible) {
+                // Hide Password
+                etPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+                ivTogglePassword.setImageResource(R.drawable.ic_visibility_off) // Replace with your drawable resource
+                isPasswordVisible = false
+            } else {
+                // Show Password
+                etPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
+                ivTogglePassword.setImageResource(R.drawable.ic_password) // Replace with your drawable resource
+                isPasswordVisible = true
+            }
+            // Move the cursor to the end of the text
+            etPassword.setSelection(etPassword.text.length)
+        }
+
+        /*tvCurrentTime = findViewById<TextView>(R.id.tv_current_time)
         println("GGGGGGGGGGGGG ${getCurrentDateTimeWithTimeZone()}");
 
         // Show the bottom sheet
@@ -58,7 +93,7 @@ class MainActivity2 : AppCompatActivity() {
 
         showDateTimePicker.setOnClickListener {
             showDateTimePicker()
-        }
+        }*/
 
        /* showDateTimePicker.setOnClickListener {
 
@@ -146,4 +181,53 @@ class MainActivity2 : AppCompatActivity() {
         updateTimeJob.cancel() // Cancel the job when the activity is destroyed
     }
 
+
+    private fun showTimePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val currentHour = calendar.get(Calendar.HOUR)
+        val currentMinute = calendar.get(Calendar.MINUTE)
+        val isPM = calendar.get(Calendar.AM_PM) == Calendar.PM
+
+        // Calculate maximum valid hour and minute
+        calendar.add(Calendar.MINUTE, 30)
+        val maxHour = calendar.get(Calendar.HOUR)
+        val maxMinute = calendar.get(Calendar.MINUTE)
+        val isMaxPM = calendar.get(Calendar.AM_PM) == Calendar.PM
+
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(currentHour)
+            .setMinute(currentMinute)
+            .setTitleText("Select Appointment time")
+            .build()
+
+        picker.addOnPositiveButtonClickListener {
+            val selectedHour = picker.hour
+            val selectedMinute = picker.minute
+            val selectedIsPM = isPM
+
+            // Check if the selected time is within the next 30 minutes
+            val selectedTimeCalendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR, selectedHour)
+                set(Calendar.MINUTE, selectedMinute)
+                set(Calendar.AM_PM, if (selectedIsPM) Calendar.PM else Calendar.AM)
+            }
+
+            val maxTimeCalendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR, maxHour)
+                set(Calendar.MINUTE, maxMinute)
+                set(Calendar.AM_PM, if (isMaxPM) Calendar.PM else Calendar.AM)
+            }
+
+            if (selectedTimeCalendar.before(maxTimeCalendar)) {
+                val selectedTime = String.format("%02d:%02d %s", selectedHour, selectedMinute, if (selectedIsPM) "PM" else "AM")
+                tvSelectedTime.text = "Selected Time: $selectedTime"
+            } else {
+                val validTime = String.format("%02d:%02d %s", maxHour, maxMinute, if (isMaxPM) "PM" else "AM")
+                tvSelectedTime.text = "Selected Time: $validTime"
+            }
+        }
+
+        picker.show(supportFragmentManager, "MATERIAL_TIME_PICKER")
+    }
 }

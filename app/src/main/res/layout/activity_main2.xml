@@ -9,7 +9,7 @@
     android:padding="16dp"
     tools:context=".MainActivity">
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tv_current_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,5 +29,62 @@
         android:layout_height="wrap_content"
         android:text="Selected Date and Time"
         android:textSize="24sp"
-        android:padding="16dp" />
+        android:padding="16dp" />-->
+
+
+    <LinearLayout
+        android:id="@+id/topView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/baseline_videocam_24"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:drawableTint="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/ivTogglePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_visibility_off" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+
+        <Button
+            android:id="@+id/btnSelectTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Time" />
+
+        <TextView
+            android:id="@+id/tvSelectedTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Selected Time: "
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
 </LinearLayout>
