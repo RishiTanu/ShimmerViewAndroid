@@ -87,4 +87,59 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submitting your flight plan"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:paddingBottom="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+            android:indeterminate="true"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFlightPlan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            app:useMaterialThemeColors="true"
+            android:padding="16dp"
+            android:scaleX="1.5"
+            android:scaleY="1.5" />
+
+        <TextView
+            android:id="@+id/tvFlightPlanStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deactive"
+            android:textSize="18sp"
+            android:paddingTop="8dp"/>
+
+    </LinearLayout>
+
 </LinearLayout>

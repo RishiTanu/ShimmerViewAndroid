@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         this.timePicker.maxDate = maxDateCalendar*//*
     }*/
 
-    private fun loadData() {
+   /* private fun loadData() {
         dataList = listOf(
             DummyItem("Title 1", "Description 1"),
             DummyItem("Title 2", "Description 2"),
@@ -109,5 +109,5 @@ class MainActivity : AppCompatActivity() {
 
         shimmerLayout.stopShimmer()
         shimmerLayout.visibility = android.view.View.VISIBLE
-    }
+    }*/
 }
