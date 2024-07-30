@@ -1,5 +1,10 @@
 package com.example.shimmerrecyclerview
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,14 +15,6 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
-
-    private val viewModel: YourViewModel by viewModels()
-
-
-    private lateinit var shimmerLayout: ShimmerFrameLayout
-    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
-    private var dataList = listOf<DummyItem>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             loadData()
         }, 3000)*/
 
-        val startDate: Calendar = Calendar.getInstance()
+       /* val startDate: Calendar = Calendar.getInstance()
         val endDate: Calendar = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_MONTH, 27)
         }
@@ -53,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             dateTimeSelectedListener,
             "Select date and time" // dialog title
         )
-        dateTimePickerDialog.show()
+        dateTimePickerDialog.show()*/
 
        /* dateTimePickerDialog.apply {
             setTitleTextColor(android.R.color.black)
@@ -68,17 +65,23 @@ class MainActivity : AppCompatActivity() {
             setCenterDividerHeight(38)
         }*/
 
+        val otp1: EditText = findViewById(R.id.otp1)
+        val otp2: EditText = findViewById(R.id.otp2)
+        val otp3: EditText = findViewById(R.id.otp3)
+        val otp4: EditText = findViewById(R.id.otp4)
 
-        // Observe network connectivity changes
-        viewModel.getNetworkStatus().observe(this, Observer { isConnected ->
-            if (isConnected) {
-                // Make your API call here
-                Toast.makeText(this, "Connected to the internet", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No internet connection", Toast.LENGTH_SHORT).show()
-            }
-        })
+        otp1.addTextChangedListener(GenericTextWatcher(otp1, otp2))
+        otp2.addTextChangedListener(GenericTextWatcher(otp2, otp3))
+        otp3.addTextChangedListener(GenericTextWatcher(otp3, otp4))
+        otp4.addTextChangedListener(GenericTextWatcher(otp4, null))
+
+        otp1.setOnKeyListener(GenericKeyEvent(otp1, null))
+        otp2.setOnKeyListener(GenericKeyEvent(otp2, otp1))
+        otp3.setOnKeyListener(GenericKeyEvent(otp3, otp2))
+        otp4.setOnKeyListener(GenericKeyEvent(otp4, otp3))
     }
+
+
     // Custom extension function to set date range
 /*    fun DialogDateTimePicker.setDateTimeRange(minDate: Long, maxDate: Long) {
         val minDateCalendar = Calendar.getInstance().apply { timeInMillis = minDate }
@@ -110,4 +113,34 @@ class MainActivity : AppCompatActivity() {
         shimmerLayout.stopShimmer()
         shimmerLayout.visibility = android.view.View.VISIBLE
     }*/
+   inner class GenericTextWatcher(private val currentEditText: EditText, private val nextEditText: EditText?) :
+       TextWatcher {
+
+       override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+           if (s?.length == 1) {
+               nextEditText?.requestFocus()
+           } else if (s?.length == 0) {
+               currentEditText.requestFocus()
+           }
+       }
+
+       override fun afterTextChanged(s: Editable?) {}
+   }
+
+    inner class GenericKeyEvent(private val currentEditText: EditText, private val previousEditText: EditText?) : View.OnKeyListener {
+
+        override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+            if (event?.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
+                if (currentEditText.text.isEmpty() && previousEditText != null) {
+                    previousEditText.text = null
+                    previousEditText.requestFocus()
+                    return true
+                }
+            }
+            return false
+        }
+    }
 }
+

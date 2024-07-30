@@ -5,18 +5,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:shimmer_duration="1000"
-        app:shimmer_auto_start="true">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.facebook.shimmer.ShimmerFrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/otp1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:importantForAccessibility="no"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/otp2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:importantForAccessibility="no"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/otp3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:importantForAccessibility="no"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/otp4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:importantForAccessibility="no"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
 
 </LinearLayout>
