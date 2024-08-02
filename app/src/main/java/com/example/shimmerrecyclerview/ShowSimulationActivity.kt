@@ -1,4 +1,4 @@
-package com.example.shimmerrecyclerview
+package com.example.practice.main
 
 
 import android.animation.TypeEvaluator
@@ -66,13 +66,14 @@ class ShowSimulationActivity : AppCompatActivity() {
     private val updateTimeJob = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.Main + updateTimeJob)
     private var apiJob: Job? = null
+    private var binding : ActivityShowSimulationBinding? = null
 
     private var legLatLngGlobalRouteCopy: MutableList<RouteList> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityShowSimulationBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = ActivityShowSimulationBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             openMap()
@@ -83,6 +84,15 @@ class ShowSimulationActivity : AppCompatActivity() {
 
         binding.apply {
 
+            binding?.resetButton?.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    // Checkbox is checked, hide all polylines
+                    clearAllPolylines()
+                } else {
+                    // Checkbox is unchecked, redraw all polylines
+                    drawAllPolylines()
+                }
+            }
 
             /* switchSimulationButton.setOnCheckedChangeListener { _, isChecked ->
                  if (isChecked) {
@@ -289,7 +299,7 @@ class ShowSimulationActivity : AppCompatActivity() {
 
 
     //design globe path and simulation code data fetched from server
-    private fun drawLegOnMapGlobalRoutes(legLatLngGlobalRouteCopy: MutableList<RouteList>) {
+   /* private fun drawLegOnMapGlobalRoutes(legLatLngGlobalRouteCopy: MutableList<RouteList>) {
         if (::mapView.isInitialized) {
             legLatLngGlobalRouteCopy.forEachIndexed { _, mapPolylineModal ->
                 index++
@@ -363,10 +373,39 @@ class ShowSimulationActivity : AppCompatActivity() {
                 }
             }
         }
+    }*/
+
+
+    private fun drawLegOnMapGlobalRoutes(legLatLngGlobalRouteCopy: MutableList<RouteList>) {
+        if (::mapView.isInitialized) {
+            // Initialize polylines according to checkbox state
+
+            if (binding?.resetButton?.isChecked!!) {
+                clearAllPolylines()
+            } else {
+                drawAllPolylines()
+            }
+
+            // Handle marker movement
+            legLatLngGlobalRouteCopy.forEach { mapPolylineModal ->
+                if (mapPolylineModal.legs.isNotEmpty()) {
+                    lifecycleScope.launch {
+                        moveMarkerAlongRoute(
+                            mapPolylineModal.legs,
+                            mapPolylineModal.isSimulationRoute,
+                            mapPolylineModal.id
+                        )
+                    }
+                }
+            }
+        }
     }
 
-
-
+    private fun clearAllPolylines() {
+        // Remove all drawn polylines from the map
+        drawnPolylines.forEach { it.remove() }
+        drawnPolylines.clear()
+    }
 
     fun moveLatLng(point: LatLng, distance: Double, bearing: Double): LatLng {
         val R = 6371e3 // Earth radius in meters
@@ -639,4 +678,58 @@ class ShowSimulationActivity : AppCompatActivity() {
         return results[0].toDouble()
     }
 
+
+    // Keep track of all polylines
+    private val drawnPolylines = mutableListOf<Polyline>()
+
+    private fun drawAllPolylines() {
+        // Redraw polylines on the map from stored data
+        legLatLngGlobalRouteCopy.forEach { mapPolylineModal ->
+            mapPolylineModal.legs.forEach { leg ->
+                val routeGeopoints = mutableListOf<LatLng>()
+                routeGeopoints.add(LatLng(leg.startLatitude, leg.startLongitude))
+                routeGeopoints.add(LatLng(leg.endLatitude, leg.endLongitude))
+
+                val polylineOptions = PolylineOptions()
+                    .clickable(true)
+                    .addAll(routeGeopoints)
+                    .color(Color.GREEN)
+                    .width(6f)
+                    .zIndex(100f)
+                    .geodesic(true)
+                val polyline = mapView.addPolyline(polylineOptions)
+                drawnPolylines.add(polyline) // Store reference to the drawn polyline
+
+                if (mapPolylineModal.isSimulationRoute) {
+                    drawCollisionSegments(leg)
+                }
+            }
+        }
+    }
+
+    private fun drawCollisionSegments(leg: GlobeRouteLeg) {
+        leg.collisionGeopoints.forEach { collisionObject ->
+            val collisionPoint = LatLng(collisionObject.latitute, collisionObject.longitute)
+            val color = getColor(collisionObject.color)
+
+            val collisionSegment = mutableListOf<LatLng>()
+            val segmentDistance = 500.00
+            val previousPoint = moveLatLng(collisionPoint, -segmentDistance, leg.heading)
+            val aheadPoint = moveLatLng(collisionPoint, segmentDistance, leg.heading)
+
+            collisionSegment.add(previousPoint)
+            collisionSegment.add(collisionPoint)
+            collisionSegment.add(aheadPoint)
+
+            val collisionPolylineOptions = PolylineOptions()
+                .clickable(true)
+                .addAll(collisionSegment)
+                .color(color)
+                .width(12f)
+                .zIndex(101f)
+
+            val collisionPolyline = mapView.addPolyline(collisionPolylineOptions)
+            drawnPolylines.add(collisionPolyline) // Store reference to the collision polyline
+        }
+    }
 }
