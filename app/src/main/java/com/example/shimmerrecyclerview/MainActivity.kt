@@ -82,3 +82,54 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+// Assuming Legs is a data class containing lists of LatLng points and collision points
+data class Leg(val geoPoints: List<LatLng>, val collisionPoints: List<LatLng>)
+
+// GoogleMap object should be globally initialized
+lateinit var map: GoogleMap
+
+// Function to draw polylines based on comparison for all legs
+data class Leg(val geoPoints: List<LatLng>, val collisionPoints: List<LatLng>)
+
+// Global GoogleMap object should be initialized
+lateinit var map: GoogleMap
+
+// Coroutine scope for launching background tasks
+val scope = CoroutineScope(Dispatchers.Main)
+
+fun drawPolylines(legs: List<Leg>) {
+    scope.launch {
+        // Process each leg on a background thread
+        withContext(Dispatchers.Default) {
+            for (leg in legs) {
+                val geoPoints = leg.geoPoints
+                val collisionPoints = leg.collisionPoints
+
+                for (i in 0 until geoPoints.size - 1) {
+                    val startPoint = geoPoints[i]
+                    val endPoint = geoPoints[i + 1]
+
+                    val color = if (collisionPoints.contains(startPoint) && collisionPoints.contains(endPoint)) {
+                        Color.RED
+                    } else {
+                        Color.GREEN
+                    }
+
+                    // Drawing on the main thread
+                    withContext(Dispatchers.Main) {
+                        map.addPolyline(
+                            PolylineOptions()
+                                .add(startPoint, endPoint)
+                                .width(5f)
+                                .color(color)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Example usage
+val legs: List<Leg> = // Initialize with your legs containing geoPoints and collisionPoints
+    drawPolylines(legs)
