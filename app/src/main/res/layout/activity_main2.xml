@@ -1,145 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-   <!-- <TextView
-        android:id="@+id/tv_current_time"
+
+    <com.github.clans.fab.FloatingActionMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Current Time"
-        android:textSize="24sp"
-        android:padding="16dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        >
 
-    <Button
-        android:id="@+id/btn_pick_date_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pick Date and Time" />
-
-    <TextView
-        android:id="@+id/tv_selected_date_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Selected Date and Time"
-        android:textSize="24sp"
-        android:padding="16dp" />-->
-
-
-    <LinearLayout
-        android:id="@+id/topView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".MainActivity">
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/baseline_videocam_24"
-        android:hint="Enter Password"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:drawableTint="@color/colorPrimary" />
-
-        <ImageView
-            android:id="@+id/ivTogglePassword"
+        <!-- Button 1 -->
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabOption1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="-40dp"
-            android:layout_marginEnd="10dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_visibility_off" />
+            fab:fab_colorNormal="@color/colorAccent"
+            fab:fab_colorPressed="@color/colorPrimaryDark"
+            fab:fab_colorRipple="@color/colorPrimary"
+            android:src="@drawable/ic_notification"
+             />
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".MainActivity">
-
-        <Button
-            android:id="@+id/btnSelectTime"
+        <!-- Button 2 -->
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabOption2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Time" />
 
-        <TextView
-            android:id="@+id/tvSelectedTime"
+        />
+
+        <!-- Button 3 -->
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabOption3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Selected Time: "
-            android:textSize="18sp" />
 
-    </LinearLayout>
+            />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        tools:context=".MainActivity">
-
-        <TextView
-            android:id="@+id/tvStatus"
+        <!-- Button 4 -->
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabOption4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Submitting your flight plan"
-            android:visibility="gone"
-            android:textSize="18sp"
-            android:paddingBottom="8dp"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-            android:indeterminate="true"/>
+            />
 
-    </LinearLayout>
+    </com.github.clans.fab.FloatingActionMenu>
 
+</RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp">
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchFlightPlan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            app:useMaterialThemeColors="true"
-            android:padding="16dp"
-            android:scaleX="1.5"
-            android:scaleY="1.5" />
-
-        <TextView
-            android:id="@+id/tvFlightPlanStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Deactive"
-            android:textSize="18sp"
-            android:paddingTop="8dp"/>
-
-    </LinearLayout>
-
-</LinearLayout>

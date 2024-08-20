@@ -43,7 +43,7 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.13.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -57,5 +57,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.7.1")
     implementation("com.github.abdulrehmank7:iOS-date-time-picker:1.05")
     implementation("com.github.florent37:singledateandtimepicker:2.2.7")
+    implementation("com.github.clans:fab:1.6.4")
+   // implementation("com.robertlevonyan.view:CustomFloatingActionButton:1.4.0")
+
 
 }
