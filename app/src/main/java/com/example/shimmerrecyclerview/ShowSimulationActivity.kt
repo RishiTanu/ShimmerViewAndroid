@@ -1,4 +1,4 @@
-package com.example.shimmerrecyclerview
+package com.example.practice.main
 
 
 import android.animation.TypeEvaluator
@@ -84,10 +84,10 @@ class ShowSimulationActivity : AppCompatActivity() {
             //   viewModel.onTriggerEvent(MapEvents.GetGlobalAirSpaceData(keyRouteId.toInt()))
             subscribeObservers()
         }
-
+        checkBoxes()
         binding.apply {
 
-            binding?.resetButton?.setOnCheckedChangeListener { _, isChecked ->
+            binding?.showPlanned?.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     // Checkbox is checked, hide all polylines
                     clearAllPolylines()
@@ -379,11 +379,10 @@ class ShowSimulationActivity : AppCompatActivity() {
     }*/
 
 
+
     private fun drawLegOnMapGlobalRoutes(legLatLngGlobalRouteCopy: MutableList<RouteList>) {
         if (::mapView.isInitialized) {
-            // Initialize polylines according to checkbox state
-
-            if (binding?.resetButton?.isChecked!!) {
+            if (binding?.showPlanned?.isChecked!!) {
                 clearAllPolylines()
             } else {
                 drawAllPolylines()
@@ -681,17 +680,54 @@ class ShowSimulationActivity : AppCompatActivity() {
         return results[0].toDouble()
     }
 
+    private val collisionPolylines = mutableListOf<Polyline>()
+    private val nearbyPolylines = mutableListOf<Polyline>()
+    private val safeDistancePolylines = mutableListOf<Polyline>()
 
     // Keep track of all polylines
     private val drawnPolylines = mutableListOf<Polyline>()
 
+   /* private fun clearAllPolylines() {
+        drawnPolylines.forEach { it.remove() }
+        drawnPolylines.clear()
+
+        collisionPolylines.clear()
+        nearbyPolylines.clear()
+        safeDistancePolylines.clear()
+    }*/
+
+    private fun togglePolylineVisibility(polylines: List<Polyline>, isVisible: Boolean) {
+        polylines.forEach { polyline ->
+            polyline.isVisible = isVisible
+        }
+    }
+
+    private fun checkBoxes(){
+        binding?.apply {
+            collision.setOnCheckedChangeListener { _, checked ->
+                togglePolylineVisibility(collisionPolylines, checked)
+            }
+
+            nearBy.setOnCheckedChangeListener { _, checked ->
+                togglePolylineVisibility(nearbyPolylines, checked)
+            }
+
+            safe.setOnCheckedChangeListener { _, checked ->
+                togglePolylineVisibility(safeDistancePolylines, checked)
+            }
+        }
+    }
+
     private fun drawAllPolylines() {
-        // Redraw polylines on the map from stored data
+        clearAllPolylines()
+
+        // Draw all routes with green color initially
         legLatLngGlobalRouteCopy.forEach { mapPolylineModal ->
             mapPolylineModal.legs.forEach { leg ->
-                val routeGeopoints = mutableListOf<LatLng>()
-                routeGeopoints.add(LatLng(leg.startLatitude, leg.startLongitude))
-                routeGeopoints.add(LatLng(leg.endLatitude, leg.endLongitude))
+                val routeGeopoints = listOf(
+                    LatLng(leg.startLatitude, leg.startLongitude),
+                    LatLng(leg.endLatitude, leg.endLongitude)
+                )
 
                 val polylineOptions = PolylineOptions()
                     .clickable(true)
@@ -700,15 +736,125 @@ class ShowSimulationActivity : AppCompatActivity() {
                     .width(6f)
                     .zIndex(100f)
                     .geodesic(true)
+
                 val polyline = mapView.addPolyline(polylineOptions)
                 drawnPolylines.add(polyline) // Store reference to the drawn polyline
+            }
+        }
 
-                if (mapPolylineModal.isSimulationRoute) {
-                    drawCollisionSegments(leg)
+        // After drawing all routes, apply visibility filters based on checkboxes
+        applyPolylineVisibility()
+    }
+
+
+
+    private fun applyPolylineVisibility() {
+        // Show/hide collision course polylines
+        collisionPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.collision?.isChecked == true
+        }
+
+        // Show/hide nearby polylines
+        nearbyPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.nearBy?.isChecked == true
+        }
+
+        // Show/hide safe distance polylines
+        safeDistancePolylines.forEach { polyline ->
+            polyline.isVisible = binding?.safe?.isChecked == true
+        }
+
+        // Show/hide planned routes
+        drawnPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.showPlanned?.isChecked == true
+        }
+    }
+
+    private fun applyPolylineVisibility() {
+        // Identify the simulation route
+        val myRoute = legLatLngGlobalRouteCopy.find { it.isSimulationRoute }
+
+        // Clear previous classifications
+        collisionPolylines.clear()
+        nearbyPolylines.clear()
+        safeDistancePolylines.clear()
+
+        if (myRoute != null) {
+            // Compare all other routes to the simulation route
+            legLatLngGlobalRouteCopy.forEach { mapPolylineModal ->
+                if (mapPolylineModal != myRoute) {
+                    mapPolylineModal.legs.forEach { leg ->
+                        myRoute.legs.forEach { myLeg ->
+                            val distance = calculateDistanceBetween(
+                                LatLng(myLeg.startLatitude, myLeg.startLongitude),
+                                LatLng(leg.startLatitude, leg.startLongitude)
+                            )
+
+                            when {
+                                distance <= 1000 -> collisionPolylines.add(getPolylineForLeg(leg))
+                                distance <= 2000 -> nearbyPolylines.add(getPolylineForLeg(leg))
+                                distance <= 5000 -> safeDistancePolylines.add(getPolylineForLeg(leg))
+                            }
+                        }
+                    }
                 }
             }
         }
+
+        // Show or hide polylines based on checkbox states
+        collisionPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.collision?.isChecked == true
+        }
+
+        nearbyPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.nearBy?.isChecked == true
+        }
+
+        safeDistancePolylines.forEach { polyline ->
+            polyline.isVisible = binding?.safe?.isChecked == true
+        }
+
+        // Ensure planned routes are shown if that checkbox is checked
+        drawnPolylines.forEach { polyline ->
+            polyline.isVisible = binding?.showPlanned?.isChecked == true
+        }
     }
+
+    // Show or hide polylines based on checkbox states
+    collisionPolylines.forEach { polyline ->
+        polyline.isVisible = binding?.collision?.isChecked == true
+    }
+
+    nearbyPolylines.forEach { polyline ->
+        polyline.isVisible = binding?.nearBy?.isChecked == true
+    }
+
+    safeDistancePolylines.forEach { polyline ->
+        polyline.isVisible = binding?.safe?.isChecked == true
+    }
+
+    // Ensure planned routes are shown if that checkbox is checked
+    drawnPolylines.forEach { polyline ->
+        polyline.isVisible = binding?.showPlanned?.isChecked == true
+    }
+}
+
+private fun getPolylineForLeg(leg: Leg): Polyline {
+    return drawnPolylines.find { polyline ->
+        val points = polyline.points
+        points.first().latitude == leg.startLatitude && points.first().longitude == leg.startLongitude &&
+                points.last().latitude == leg.endLatitude && points.last().longitude == leg.endLongitude
+    } ?: throw IllegalStateException("Polyline for leg not found")
+}
+
+    private fun getPolylineForLeg(leg: Leg): Polyline {
+        return drawnPolylines.find { polyline ->
+            val points = polyline.points
+            points.first().latitude == leg.startLatitude && points.first().longitude == leg.startLongitude &&
+                    points.last().latitude == leg.endLatitude && points.last().longitude == leg.endLongitude
+        } ?: throw IllegalStateException("Polyline for leg not found")
+    }
+
 
     private fun drawCollisionSegments(leg: GlobeRouteLeg) {
         Log.d("TAG", "drawCollisionSegments============ ${leg.toString()}")
