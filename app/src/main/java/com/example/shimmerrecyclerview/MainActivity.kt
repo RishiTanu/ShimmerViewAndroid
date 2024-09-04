@@ -1,55 +1,67 @@
 package com.example.shimmerrecyclerview
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
+import android.view.animation.TranslateAnimation
+import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.github.clans.fab.FloatingActionButton
-import com.github.clans.fab.FloatingActionMenu
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var fabMenu: FloatingActionMenu
-    private lateinit var fabOption1: FloatingActionButton
-    private lateinit var fabOption2: FloatingActionButton
-    private lateinit var fabOption3: FloatingActionButton
-    private lateinit var fabOption4: FloatingActionButton
 
+    private lateinit var recyclerViewWeather: RecyclerView
+    private lateinit var btnToggleWeather: Button
+    private lateinit var dialogWeather: LinearLayout
+
+    private var isDialogVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main2)
+        setContentView(R.layout.activity_main)
 
-        fabMenu = findViewById(R.id.fabMenu)
-        fabOption1 = findViewById(R.id.fabOption1)
-        fabOption2 = findViewById(R.id.fabOption2)
-        fabOption3 = findViewById(R.id.fabOption3)
-        fabOption4 = findViewById(R.id.fabOption4)
+        // Initialize views
+        recyclerViewWeather = findViewById(R.id.recyclerViewWeather)
+        btnToggleWeather = findViewById(R.id.btnToggleWeather)
+        dialogWeather = findViewById(R.id.dialogWeather)
 
-    }
+        // Setup RecyclerView
+        val dummyItems = listOf("Temperature", "Wind", "Rain Report", "Forecast")
+        val adapter = DummyAdapter(dummyItems)
+        recyclerViewWeather.layoutManager = LinearLayoutManager(this)
+        recyclerViewWeather.adapter = adapter
 
-    override fun onResume() {
-        super.onResume()
-        fabOption1.setOnClickListener {
-            Toast.makeText(this, "Option 1 clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        fabOption2.setOnClickListener {
-            Toast.makeText(this, "Option 2 clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        fabOption3.setOnClickListener {
-            Toast.makeText(this, "Option 3 clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        fabOption4.setOnClickListener {
-            Toast.makeText(this, "Option 4 clicked", Toast.LENGTH_SHORT).show()
-        }
-
-        // Optional: set a listener to handle the opening and closing of the menu
-        fabMenu.setOnMenuToggleListener { opened ->
-            if (opened) {
-                Toast.makeText(this, "Menu is opened", Toast.LENGTH_SHORT).show()
+        // Toggle Weather Dialog
+        btnToggleWeather.setOnClickListener {
+            if (isDialogVisible) {
+                hideWeatherDialog()
             } else {
-                Toast.makeText(this, "Menu is closed", Toast.LENGTH_SHORT).show()
+                showWeatherDialog()
             }
         }
+    }
+
+    private fun showWeatherDialog() {
+        dialogWeather.visibility = View.VISIBLE
+        val animate = TranslateAnimation(0f, 0f, dialogWeather.height.toFloat(), 0f)
+        animate.duration = 500
+        animate.fillAfter = true
+        dialogWeather.startAnimation(animate)
+
+        // Update button text
+        btnToggleWeather.text = "Weather ⬆"
+        isDialogVisible = true
+    }
+
+    private fun hideWeatherDialog() {
+        val animate = TranslateAnimation(0f, 0f, 0f, dialogWeather.height.toFloat())
+        animate.duration = 500
+        animate.fillAfter = true
+        dialogWeather.startAnimation(animate)
+        dialogWeather.visibility = View.GONE
+
+        // Update button text
+        btnToggleWeather.text = "Weather ⬇"
+        isDialogVisible = false
     }
 }
