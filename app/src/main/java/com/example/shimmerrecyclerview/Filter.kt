@@ -25,11 +25,6 @@ class Filter : AppCompatActivity() {
         val btnFilter = findViewById<View>(R.id.btnFilter)
         filterDialog = findViewById(R.id.filterDialog)
 
-        // Checkboxes
-        val checkboxShowPlanned = findViewById<CheckBox>(R.id.checkboxShowPlanned)
-        val checkboxCollisionCourse = findViewById<CheckBox>(R.id.checkboxCollisionCourse)
-        val checkboxNearby = findViewById<CheckBox>(R.id.checkboxNearby)
-        val checkboxSafeDistance = findViewById<CheckBox>(R.id.checkboxSafeDistance)
 
         // Toggle filter dialog visibility on button click
         btnFilter.setOnClickListener {
@@ -38,23 +33,6 @@ class Filter : AppCompatActivity() {
             } else {
                 showFilterDialog()
             }
-        }
-
-        // Checkbox click listeners
-        checkboxShowPlanned.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(this, "Show Planned: $isChecked", Toast.LENGTH_SHORT).show()
-        }
-
-        checkboxCollisionCourse.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(this, "Collision Course: $isChecked", Toast.LENGTH_SHORT).show()
-        }
-
-        checkboxNearby.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(this, "Near By: $isChecked", Toast.LENGTH_SHORT).show()
-        }
-
-        checkboxSafeDistance.setOnCheckedChangeListener { _, isChecked ->
-            Toast.makeText(this, "Safe Distance: $isChecked", Toast.LENGTH_SHORT).show()
         }
     }
 
